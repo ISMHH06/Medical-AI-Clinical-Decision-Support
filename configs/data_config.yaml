@@ -1,0 +1,9 @@
+# Fill in the two input paths before running the dataset builder. Relative paths
+# are resolved from the repository root; absolute paths are also supported.
+metadata_csv: data/raw/df_chexpert_plus_240401.csv
+labels_jsonl: data/raw/findings_fixed.json
+output_dir: data/processed/
+
+# Output locations for the Phase 2 processed dataset and its documentation.
+processed_output: "data/processed/chexpert_processed.parquet"
+data_dictionary_output: "data/processed/data_dictionary.md"

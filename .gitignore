@@ -225,3 +225,8 @@ data/external/*
 !data/raw/.gitkeep
 !data/processed/.gitkeep
 !data/external/.gitkeep
+
+# My envirenement 
+
+my-env
+.vscode
