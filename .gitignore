@@ -220,13 +220,18 @@ __marimo__/
 # Data (never commit raw or processed medical data)
 
 data/raw/*
+data/raw/images/
 data/processed/*
 data/external/*
+CheXpertPlus_selected/
 !data/raw/.gitkeep
 !data/processed/.gitkeep
 !data/external/.gitkeep
+
 
 # My envirenement 
 
 my-env
 .vscode
+
+
