@@ -2,3 +2,6 @@ pandas
 pyarrow
 PyYAML
 redivis
+matplotlib
+seaborn
+Pillow
