@@ -5,3 +5,10 @@ redivis
 matplotlib
 seaborn
 Pillow
+# PyTorch (CUDA 12.6) must be installed separately -- pinned to a
+# known-stable version pair after torch 2.14.0+cu126/torchvision
+# 0.29.0+cu126 hit a torchvision::nms operator registration bug:
+# pip install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0 --index-url https://download.pytorch.org/whl/cu126
+torch==2.6.0
+torchvision==0.21.0
+torchaudio==2.6.0

@@ -234,4 +234,7 @@ CheXpertPlus_selected/
 my-env
 .vscode
 
+# Model checkpoints (large binaries) -- keep metrics JSON trackable
+models/*.pt
+
 

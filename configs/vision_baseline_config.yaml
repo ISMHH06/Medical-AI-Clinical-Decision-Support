@@ -1,0 +1,7 @@
+batch_size: 16
+learning_rate: 0.0001
+max_epochs: 15
+early_stopping_patience: 4
+manifest_path: data/processed/image_subset_manifest.parquet
+checkpoint_path: models/vision_baseline_best.pt
+metrics_output_path: models/vision_baseline_best_metrics.json
