@@ -1,0 +1,43 @@
+{
+  "epoch": 5,
+  "mean_auroc": 0.6998567144970519,
+  "mean_auprc": 0.4726389162143363,
+  "per_label_auroc": {
+    "Cardiomegaly_label": 0.7411651898304875,
+    "Edema_label": 0.7310740272065802,
+    "Atelectasis_label": 0.6297847777686155,
+    "Pleural Effusion_label": 0.7420670504179804,
+    "Consolidation_label": 0.6551925272615955
+  },
+  "per_label_auprc": {
+    "Cardiomegaly_label": 0.46965883073308207,
+    "Edema_label": 0.5377893590622167,
+    "Atelectasis_label": 0.4135261808522158,
+    "Pleural Effusion_label": 0.6575816659481462,
+    "Consolidation_label": 0.2846385444760209
+  },
+  "val_loss": 0.8966788626300897,
+  "train_loss": 0.8315882613677613,
+  "sensitivity_specificity_at_0_5": {
+    "Cardiomegaly_label": {
+      "sensitivity": 0.5465465465465466,
+      "specificity": 0.7648870636550308
+    },
+    "Edema_label": {
+      "sensitivity": 0.5954022988505747,
+      "specificity": 0.7270642201834863
+    },
+    "Atelectasis_label": {
+      "sensitivity": 0.6243781094527363,
+      "specificity": 0.5646408839779006
+    },
+    "Pleural Effusion_label": {
+      "sensitivity": 0.7495395948434622,
+      "specificity": 0.5785340314136126
+    },
+    "Consolidation_label": {
+      "sensitivity": 0.5201793721973094,
+      "specificity": 0.6715867158671587
+    }
+  }
+}

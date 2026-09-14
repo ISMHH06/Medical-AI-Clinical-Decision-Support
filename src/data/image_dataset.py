@@ -7,6 +7,7 @@ filtered by split ("train" or "val").
 from __future__ import annotations
 
 import logging
+from collections.abc import Callable
 from pathlib import Path
 
 import pandas as pd
@@ -56,10 +57,43 @@ def build_transform(split: str) -> transforms.Compose:
     )
 
 
-class ChestXrayDataset(Dataset):
-    """Chest X-ray multi-label dataset backed by the subset manifest parquet."""
+def build_transform_e03(split: str) -> transforms.Compose:
+    """Build the stronger E03 augmentation pipeline for a split.
 
-    def __init__(self, manifest_path: str | Path, split: str = "train") -> None:
+    Train extends the baseline RandomHorizontalFlip with RandomRotation and
+    ColorJitter before ToTensor/normalize. Val delegates to
+    :func:`build_transform`, so it stays deterministic resize + normalize
+    with no augmentation.
+    """
+    if split != "train":
+        return build_transform(split)
+    normalize = transforms.Normalize(mean=IMAGENET_MEAN, std=IMAGENET_STD)
+    return transforms.Compose(
+        [
+            transforms.Resize(IMAGE_SIZE),
+            transforms.RandomHorizontalFlip(p=0.5),
+            transforms.RandomRotation(degrees=10),
+            transforms.ColorJitter(brightness=0.15, contrast=0.15),
+            transforms.ToTensor(),
+            normalize,
+        ]
+    )
+
+
+class ChestXrayDataset(Dataset):
+    """Chest X-ray multi-label dataset backed by the subset manifest parquet.
+
+    ``transform_builder`` selects the augmentation pipeline; it defaults to
+    :func:`build_transform` so E01/E02 behavior is unchanged unless a caller
+    (e.g. E03) explicitly passes :func:`build_transform_e03`.
+    """
+
+    def __init__(
+        self,
+        manifest_path: str | Path,
+        split: str = "train",
+        transform_builder: Callable[[str], transforms.Compose] = build_transform,
+    ) -> None:
         if split not in ("train", "val"):
             raise ValueError(f"split must be 'train' or 'val', got {split!r}.")
         manifest_file = Path(manifest_path)
@@ -79,7 +113,7 @@ class ChestXrayDataset(Dataset):
 
         self.records = subset
         self.split = split
-        self.transform = build_transform(split)
+        self.transform = transform_builder(split)
 
     def __len__(self) -> int:
         return len(self.records)
