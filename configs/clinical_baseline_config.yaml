@@ -1,0 +1,7 @@
+batch_size: 32
+learning_rate: 0.001
+max_epochs: 30
+early_stopping_patience: 5
+manifest_path: data/processed/image_subset_manifest.parquet
+checkpoint_path: models/clinical_baseline_best.pt
+metrics_output_path: models/clinical_baseline_best_metrics.json
