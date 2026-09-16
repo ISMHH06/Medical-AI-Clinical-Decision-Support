@@ -1,0 +1,38 @@
+[
+  {
+    "vision_weight": 0.6,
+    "clinical_weight": 0.4,
+    "mean_auroc": 0.7265304558832261,
+    "mean_auprc": 0.5046591865584706
+  },
+  {
+    "vision_weight": 0.7,
+    "clinical_weight": 0.30000000000000004,
+    "mean_auroc": 0.7273075993611949,
+    "mean_auprc": 0.5053712689040031
+  },
+  {
+    "vision_weight": 0.8,
+    "clinical_weight": 0.19999999999999996,
+    "mean_auroc": 0.7273590467562883,
+    "mean_auprc": 0.5045870542098669
+  },
+  {
+    "vision_weight": 0.9,
+    "clinical_weight": 0.09999999999999998,
+    "mean_auroc": 0.7270959351174221,
+    "mean_auprc": 0.5038874689943651
+  },
+  {
+    "vision_weight": 0.95,
+    "clinical_weight": 0.050000000000000044,
+    "mean_auroc": 0.7269323406310644,
+    "mean_auprc": 0.5031655919199934
+  },
+  {
+    "vision_weight": 1.0,
+    "clinical_weight": 0.0,
+    "mean_auroc": 0.7267343352021707,
+    "mean_auprc": 0.5030733833207441
+  }
+]
