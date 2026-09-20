@@ -94,8 +94,8 @@ class ChestXrayDataset(Dataset):
         split: str = "train",
         transform_builder: Callable[[str], transforms.Compose] = build_transform,
     ) -> None:
-        if split not in ("train", "val"):
-            raise ValueError(f"split must be 'train' or 'val', got {split!r}.")
+        if split not in ("train", "val", "test"):
+            raise ValueError(f"split must be 'train', 'val', or 'test', got {split!r}.")
         manifest_file = Path(manifest_path)
         if not manifest_file.is_file():
             raise FileNotFoundError(f"Manifest was not found: {manifest_file}")

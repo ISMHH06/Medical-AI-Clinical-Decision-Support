@@ -1,0 +1,33 @@
+# Phase 7 E08: Early fusion config
+experiment_id: E08
+phase: 7
+model: Early fusion (frozen DenseNet-121 embeddings + trainable clinical encoder + fusion MLP)
+
+training:
+  batch_size: 32
+  learning_rate: 0.001
+  max_epochs: 30
+  early_stopping_patience: 5
+
+data:
+  manifest_path: data/processed/image_subset_manifest.parquet
+  splits: [train, val, test]
+
+model:
+  vision_embedding_dim: 1024
+  clinical_feature_dim: 29
+  fusion_hidden_dim: 128
+  num_labels: 5
+
+optimization:
+  optimizer: adam
+  lr_scheduler: ReduceLROnPlateau
+  scheduler_factor: 0.5
+  scheduler_patience: 2
+
+checkpointing:
+  checkpoint_path: models/fusion_e08_best.pt
+  metrics_output_path: models/fusion_e08_best_metrics.json
+
+experiment_log:
+  log_path: docs/experiment_log.md
