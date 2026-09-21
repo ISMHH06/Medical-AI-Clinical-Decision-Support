@@ -1,0 +1,36 @@
+# Phase 7 E09: Early fusion with partial vision fine-tuning
+experiment_id: E09
+phase: 7
+model: Early fusion with partial vision fine-tuning (denseblock4+norm5 unfrozen, frozen denseblock3, trainable clinical encoder + fusion MLP)
+
+training:
+  batch_size: 16
+  learning_rate: 0.0001
+  max_epochs: 20
+  early_stopping_patience: 5
+
+data:
+  manifest_path: data/processed/image_subset_manifest.parquet
+  splits: [train, val]
+
+model:
+  vision_architecture: build_vision_baseline_frozen
+  unfreeze_from_block: denseblock3
+  further_unfreeze: [denseblock4, norm5]
+  clinical_feature_dim: 29
+  fusion_hidden_dim: 128
+  num_labels: 5
+
+optimization:
+  optimizer: adam
+  optimizer_filter: requires_grad
+  lr_scheduler: ReduceLROnPlateau
+  scheduler_factor: 0.5
+  scheduler_patience: 2
+
+checkpointing:
+  checkpoint_path: models/fusion_e09_best.pt
+  metrics_output_path: models/fusion_e09_best_metrics.json
+
+experiment_log:
+  log_path: docs/experiment_log.md
