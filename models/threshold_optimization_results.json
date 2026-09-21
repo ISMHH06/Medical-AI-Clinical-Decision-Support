@@ -1,0 +1,76 @@
+{
+  "vision_e04": {
+    "Cardiomegaly_label": {
+      "optimal_threshold": 0.45,
+      "sensitivity_at_optimal": 0.7297297297297297,
+      "specificity_at_optimal": 0.6591375770020534,
+      "sensitivity_at_0.5": 0.6666666666666666,
+      "specificity_at_0.5": 0.7207392197125256
+    },
+    "Edema_label": {
+      "optimal_threshold": 0.35000000000000003,
+      "sensitivity_at_optimal": 0.8482758620689655,
+      "specificity_at_optimal": 0.48853211009174313,
+      "sensitivity_at_0.5": 0.6574712643678161,
+      "specificity_at_0.5": 0.6662844036697247
+    },
+    "Atelectasis_label": {
+      "optimal_threshold": 0.5,
+      "sensitivity_at_optimal": 0.6442786069651741,
+      "specificity_at_optimal": 0.5403314917127072,
+      "sensitivity_at_0.5": 0.6442786069651741,
+      "specificity_at_0.5": 0.5403314917127072
+    },
+    "Pleural Effusion_label": {
+      "optimal_threshold": 0.45,
+      "sensitivity_at_optimal": 0.7734806629834254,
+      "specificity_at_optimal": 0.6269633507853403,
+      "sensitivity_at_0.5": 0.7219152854511971,
+      "specificity_at_0.5": 0.6780104712041884
+    },
+    "Consolidation_label": {
+      "optimal_threshold": 0.4,
+      "sensitivity_at_optimal": 0.757847533632287,
+      "specificity_at_optimal": 0.544280442804428,
+      "sensitivity_at_0.5": 0.5874439461883408,
+      "specificity_at_0.5": 0.6891143911439115
+    }
+  },
+  "fusion_e08": {
+    "Cardiomegaly_label": {
+      "optimal_threshold": 0.5,
+      "sensitivity_at_optimal": 0.6936936936936937,
+      "specificity_at_optimal": 0.7217659137577002,
+      "sensitivity_at_0.5": 0.6936936936936937,
+      "specificity_at_0.5": 0.7217659137577002
+    },
+    "Edema_label": {
+      "optimal_threshold": 0.35000000000000003,
+      "sensitivity_at_optimal": 0.8137931034482758,
+      "specificity_at_optimal": 0.5493119266055045,
+      "sensitivity_at_0.5": 0.6459770114942529,
+      "specificity_at_0.5": 0.6869266055045872
+    },
+    "Atelectasis_label": {
+      "optimal_threshold": 0.5,
+      "sensitivity_at_optimal": 0.6442786069651741,
+      "specificity_at_optimal": 0.5082872928176796,
+      "sensitivity_at_0.5": 0.6442786069651741,
+      "specificity_at_0.5": 0.5082872928176796
+    },
+    "Pleural Effusion_label": {
+      "optimal_threshold": 0.5,
+      "sensitivity_at_optimal": 0.7440147329650092,
+      "specificity_at_optimal": 0.6845549738219895,
+      "sensitivity_at_0.5": 0.7440147329650092,
+      "specificity_at_0.5": 0.6845549738219895
+    },
+    "Consolidation_label": {
+      "optimal_threshold": 0.2,
+      "sensitivity_at_optimal": 0.7488789237668162,
+      "specificity_at_optimal": 0.5728782287822878,
+      "sensitivity_at_0.5": 0.336322869955157,
+      "specificity_at_0.5": 0.8551660516605166
+    }
+  }
+}
