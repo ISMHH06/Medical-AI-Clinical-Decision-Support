@@ -69,7 +69,7 @@ def main() -> None:
     val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, num_workers=0)
 
     # Compute pos_weight from training targets
-    train_targets = train_dataset.targets.numpy()  # (N, 5)
+    train_targets = train_dataset.targets  # (N, 5) torch.Tensor
     pos_weight = compute_pos_weight_from_targets(train_targets)
     pos_weight = pos_weight.to(device)
 
@@ -95,9 +95,9 @@ def main() -> None:
 
     for epoch in range(1, max_epochs + 1):
         # Train one epoch
-        train_loss, train_metrics = train_one_epoch(
+        train_loss, _, _ = train_one_epoch(
             model, train_loader, criterion, optimizer, device
-        )
+        )   
 
         # Evaluate on validation (3-value return: mean_auroc, mean_auprc, sensitivity_specificity dict)
         val_auc, val_ap, val_sens_spec = evaluate(

@@ -38,8 +38,9 @@ def train_one_epoch(
     total_samples = 0
     all_targets: list[np.ndarray] = []
     all_logits: list[np.ndarray] = []
+    total_batches = len(loader)
 
-    for vision_emb, clinical_feat, targets in loader:
+    for batch_idx, (vision_emb, clinical_feat, targets) in enumerate(loader, start=1):
         vision_emb = vision_emb.to(device)
         clinical_feat = clinical_feat.to(device)
         targets = targets.to(device)
@@ -53,6 +54,9 @@ def train_one_epoch(
         batch_size = vision_emb.size(0)
         total_loss += float(loss.item()) * batch_size
         total_samples += batch_size
+        if batch_idx % 50 == 0:
+            running_loss = total_loss / total_samples if total_samples else float("nan")
+            print(f"  Batch {batch_idx}/{total_batches} | running loss: {running_loss:.4f}")
         all_targets.append(targets.detach().cpu().numpy())
         all_logits.append(logits.detach().cpu().numpy())
 
