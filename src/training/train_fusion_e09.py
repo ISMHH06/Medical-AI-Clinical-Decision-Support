@@ -46,6 +46,7 @@ def main() -> None:
     max_epochs = 20
     early_stopping_patience = 5
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    logging.basicConfig(level=logging.INFO, format="%(message)s")
 
     LOGGER.info("=" * 70)
     LOGGER.info("Phase 7 E09: Early fusion with partial vision fine-tuning")
@@ -113,6 +114,7 @@ def main() -> None:
             max_epochs,
             train_loss,
             val_auc,
+            val_ap,
             optimizer.param_groups[0]["lr"],
         )
 
