@@ -5,6 +5,8 @@ redivis
 matplotlib
 seaborn
 Pillow
+shap
+grad-cam
 # PyTorch (CUDA 12.6) must be installed separately -- pinned to a
 # known-stable version pair after torch 2.14.0+cu126/torchvision
 # 0.29.0+cu126 hit a torchvision::nms operator registration bug:
