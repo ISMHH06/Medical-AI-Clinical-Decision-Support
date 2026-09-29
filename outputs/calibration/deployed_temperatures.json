@@ -1,0 +1,102 @@
+[
+  {
+    "label": "Cardiomegaly_label",
+    "model": "e04",
+    "fitted_temperature": 1.180550698628139,
+    "deployed_temperature": 1.0,
+    "deployed": false,
+    "reason": "ece_width did not improve on test (0.165251 -> 0.172300); kept T=1.0",
+    "ece_width_before": 0.1652513908685144,
+    "ece_width_after": 0.1723002189999868
+  },
+  {
+    "label": "Cardiomegaly_label",
+    "model": "e08",
+    "fitted_temperature": 1.4368110233951832,
+    "deployed_temperature": 1.0,
+    "deployed": false,
+    "reason": "ece_width did not improve on test (0.139504 -> 0.154892); kept T=1.0",
+    "ece_width_before": 0.1395041352696787,
+    "ece_width_after": 0.1548924562491984
+  },
+  {
+    "label": "Edema_label",
+    "model": "e04",
+    "fitted_temperature": 1.1026804848182514,
+    "deployed_temperature": 1.0,
+    "deployed": false,
+    "reason": "ece_width did not improve on test (0.100377 -> 0.104100); kept T=1.0",
+    "ece_width_before": 0.1003774710503141,
+    "ece_width_after": 0.1041001119206614
+  },
+  {
+    "label": "Edema_label",
+    "model": "e08",
+    "fitted_temperature": 1.3458573644460403,
+    "deployed_temperature": 1.0,
+    "deployed": false,
+    "reason": "ece_width did not improve on test (0.111553 -> 0.113927); kept T=1.0",
+    "ece_width_before": 0.1115529597010406,
+    "ece_width_after": 0.1139267094145282
+  },
+  {
+    "label": "Atelectasis_label",
+    "model": "e04",
+    "fitted_temperature": 1.0893920313979069,
+    "deployed_temperature": 1.0,
+    "deployed": false,
+    "reason": "ece_width did not improve on test (0.096566 -> 0.102868); kept T=1.0",
+    "ece_width_before": 0.0965664020514107,
+    "ece_width_after": 0.1028681058320176
+  },
+  {
+    "label": "Atelectasis_label",
+    "model": "e08",
+    "fitted_temperature": 2.623655374492323,
+    "deployed_temperature": 2.623655374492323,
+    "deployed": true,
+    "reason": "ece_width improved on test (0.206423 -> 0.201487)",
+    "ece_width_before": 0.2064226413006743,
+    "ece_width_after": 0.2014870205691493
+  },
+  {
+    "label": "Pleural Effusion_label",
+    "model": "e04",
+    "fitted_temperature": 1.2313572355074935,
+    "deployed_temperature": 1.2313572355074935,
+    "deployed": true,
+    "reason": "ece_width improved on test (0.034278 -> 0.021050)",
+    "ece_width_before": 0.0342780333352551,
+    "ece_width_after": 0.0210500318550153
+  },
+  {
+    "label": "Pleural Effusion_label",
+    "model": "e08",
+    "fitted_temperature": 1.1393954784977172,
+    "deployed_temperature": 1.1393954784977172,
+    "deployed": true,
+    "reason": "ece_width improved on test (0.088710 -> 0.087885)",
+    "ece_width_before": 0.0887102097644267,
+    "ece_width_after": 0.0878845715961527
+  },
+  {
+    "label": "Consolidation_label",
+    "model": "e04",
+    "fitted_temperature": 1.0205481080226797,
+    "deployed_temperature": 1.0,
+    "deployed": false,
+    "reason": "ece_width did not improve on test (0.217329 -> 0.218742); kept T=1.0",
+    "ece_width_before": 0.2173288887142681,
+    "ece_width_after": 0.2187424416750317
+  },
+  {
+    "label": "Consolidation_label",
+    "model": "e08",
+    "fitted_temperature": 1.1937921968906082,
+    "deployed_temperature": 1.1937921968906082,
+    "deployed": true,
+    "reason": "ece_width improved on test (0.120810 -> 0.119817)",
+    "ece_width_before": 0.1208103093118148,
+    "ece_width_after": 0.1198173090193004
+  }
+]

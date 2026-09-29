@@ -1,0 +1,72 @@
+[
+  {
+    "label": "Cardiomegaly_label",
+    "model": "e04",
+    "temperature": 1.180550698628139,
+    "val_bce_before": 0.5545820591978182,
+    "val_bce_after": 0.5517574742365877
+  },
+  {
+    "label": "Cardiomegaly_label",
+    "model": "e08",
+    "temperature": 1.4368110233951832,
+    "val_bce_before": 0.5545313044228679,
+    "val_bce_after": 0.5388259961152649
+  },
+  {
+    "label": "Edema_label",
+    "model": "e04",
+    "temperature": 1.1026804848182514,
+    "val_bce_before": 0.5627715489516478,
+    "val_bce_after": 0.5619131761845985
+  },
+  {
+    "label": "Edema_label",
+    "model": "e08",
+    "temperature": 1.3458573644460405,
+    "val_bce_before": 0.5723659826699746,
+    "val_bce_after": 0.5633018442683922
+  },
+  {
+    "label": "Atelectasis_label",
+    "model": "e04",
+    "temperature": 1.0893920313979069,
+    "val_bce_before": 0.6263460750064114,
+    "val_bce_after": 0.6259179552574113
+  },
+  {
+    "label": "Atelectasis_label",
+    "model": "e08",
+    "temperature": 2.623655374492323,
+    "val_bce_before": 0.7091102507995741,
+    "val_bce_after": 0.6810227055441652
+  },
+  {
+    "label": "Pleural Effusion_label",
+    "model": "e04",
+    "temperature": 1.2313572355074935,
+    "val_bce_before": 0.5560084476250793,
+    "val_bce_after": 0.5512260538137514
+  },
+  {
+    "label": "Pleural Effusion_label",
+    "model": "e08",
+    "temperature": 1.1393954784977172,
+    "val_bce_before": 0.5596445061465224,
+    "val_bce_after": 0.5579076763661277
+  },
+  {
+    "label": "Consolidation_label",
+    "model": "e04",
+    "temperature": 1.0205481080226795,
+    "val_bce_before": 0.552763243256649,
+    "val_bce_after": 0.5527240200861523
+  },
+  {
+    "label": "Consolidation_label",
+    "model": "e08",
+    "temperature": 1.1937921968906082,
+    "val_bce_before": 0.47836572544860584,
+    "val_bce_after": 0.47420107128859346
+  }
+]
