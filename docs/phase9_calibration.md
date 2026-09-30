@@ -55,8 +55,32 @@ Rather than deploy all 10 fitted temperatures uniformly (which would mean shippi
 
 Full artifacts: `outputs/calibration/temperatures.json` (all 10 fitted values with val BCE), `outputs/calibration/temperature_scaling_results.csv` (full before/after test table: BCE, equal-width ECE, quantile ECE), `outputs/calibration/deployed_temperatures.json` (final deployment decision with a machine-readable reason per row).
 
-## Limitations
+## Limitations (temperature scaling)
 
 - Temperature scaling is a single-scalar correction per (label, model). It can rescale a curve's overall confidence but cannot fix a non-monotonic or highly label-specific miscalibration pattern (the Atelectasis/E08 case) as well as a more flexible method (e.g. isotonic regression) might — that tradeoff was accepted here for simplicity and interpretability, not because a better fix doesn't exist.
 - The selective-deployment rule is gated on equal-width ECE specifically. Two of the four deployed cases (Atelectasis/E08, Consolidation/E08) also improve under quantile ECE; the other two were not re-checked against that stricter gate. This is a reasonable, stated simplification, not an oversight to be discovered later.
 - This work calibrates *marginal* per-label probabilities. It says nothing about calibration conditioned on demographic subgroups — that question is explicitly left to Phase 10, and connects directly to the fairness signal Phase 8's SHAP analysis already surfaced.
+
+## Abstention (selective prediction)
+
+The second Phase 9 sub-step asks a downstream question: given calibrated confidence, can the system usefully say "don't trust this one, send it to a human" instead of always forcing a decision?
+
+**Method.** Per-label decision thresholds were taken from Phase 7's existing Youden's J optimization (`models/threshold_optimization_results.json`) rather than recomputed, since that artifact already existed and disagreeing with it would need justification we didn't have. For every test example, the deployed (post-temperature-scaling) probability was used to compute a confidence score as `|calibrated_prob - label_threshold|` — distance from that label's own decision boundary, not distance from a fixed 0.5. Test examples were ranked by this score and coverage was swept from 100% (everything retained) down to 50% (the least-confident half abstained on), recomputing sensitivity, specificity, and balanced accuracy on the retained set at each step, separately for all 5 labels × 2 models.
+
+**Headline result: abstention improves balanced accuracy in all 10 (label, model) combinations**, comparing full coverage (1.0) against abstaining on the least-confident 30% (coverage 0.7) — no exceptions. That's a real validation that the calibrated confidence scores carry genuine information about which predictions are harder to trust, not just noise ranked by chance. The gains are largest for the two structurally weak labels: Atelectasis/E08 improves the most (balanced accuracy 0.606 → 0.639), and it is also the single worst-calibrated case from the temperature-scaling analysis above (residual ECE 0.201 even after its T=2.62 correction) — the label with the least trustworthy raw confidence is also the one that benefits most from a mechanism built to act on that confidence. That's a coherent, connected story across both sub-steps, not a coincidence to leave unremarked.
+
+**A more precise reading, from the coverage curves rather than the balanced-accuracy summary alone.** Balanced accuracy is an average of sensitivity and specificity, and averaging can hide two real, opposing trends that cancel into a small net number. Plotting sensitivity and specificity as separate lines (rather than only the combined metric) surfaced exactly that for two labels:
+
+- **Consolidation/E08** shows sensitivity rising sharply as coverage drops (0.76 → 0.93) while specificity *falls* just as sharply (0.50 → 0.36). The balanced-accuracy headline (0.621 → 0.650) reads as a modest, unremarkable improvement; the underlying curves show the operating point shifting substantially toward sensitivity at real cost to specificity, not a clean, symmetric improvement. This is consistent with Consolidation/E08's unusually low decision threshold (0.20, versus 0.35–0.50 for every other label/model combination): at that threshold the model already leans toward calling cases positive, so the most-confident subset by `|prob − 0.20|` becomes increasingly dominated by high-probability positives as coverage shrinks, starving the specificity calculation of confidently-negative examples.
+- **Atelectasis/E04** shows the mirror pattern: sensitivity *declines* slightly as coverage drops (0.40 → 0.33) while specificity climbs (0.78 → 0.89) — again a real tradeoff, not a uniform gain.
+- The other three labels (Cardiomegaly, Edema, Pleural Effusion) show the more expected pattern for both models: sensitivity rises as coverage tightens, specificity stays roughly flat or drifts only slightly — abstention removing genuinely hard cases without a strong compensating cost on the other axis.
+
+The corrected framing, then, is not "abstention helps every label roughly the same way" — it's "abstention improves the balanced-accuracy summary everywhere, but for two of the five labels that improvement is actually a sensitivity/specificity tradeoff being averaged into a smaller-looking net number, and the shape of that tradeoff is explainable by each label's own decision threshold."
+
+Full artifacts: `outputs/calibration/abstention_coverage_results.csv` (all 110 rows: label × model × coverage-step × sensitivity/specificity/balanced accuracy/n_retained), `outputs/calibration/abstention_coverage_curves.png` (the 5-panel sensitivity/specificity-vs-coverage figure).
+
+## Limitations (abstention)
+
+- Coverage was only swept down to 50%; behavior beyond that point (abstaining on more than half of cases) is untested and not assumed to continue the same trends.
+- Sensitivity/specificity at low coverage rest on smaller retained samples than at full coverage (1314 → roughly 657 at coverage 0.5, further split by predicted class), so the most restrictive coverage points on each curve carry more sampling variance than the full-coverage point, even though no point showed the kind of single-digit-sample instability seen earlier in the equal-width ECE binning check.
+- This analysis reports what abstention *could* achieve on the retained set; it does not model what happens to the abstained-on 30–50% of cases in practice (e.g. radiologist workload, turnaround time) — that operational question is out of scope here.
