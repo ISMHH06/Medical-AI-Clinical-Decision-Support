@@ -84,3 +84,37 @@ Full artifacts: `outputs/calibration/abstention_coverage_results.csv` (all 110 r
 - Coverage was only swept down to 50%; behavior beyond that point (abstaining on more than half of cases) is untested and not assumed to continue the same trends.
 - Sensitivity/specificity at low coverage rest on smaller retained samples than at full coverage (1314 → roughly 657 at coverage 0.5, further split by predicted class), so the most restrictive coverage points on each curve carry more sampling variance than the full-coverage point, even though no point showed the kind of single-digit-sample instability seen earlier in the equal-width ECE binning check.
 - This analysis reports what abstention *could* achieve on the retained set; it does not model what happens to the abstained-on 30–50% of cases in practice (e.g. radiologist workload, turnaround time) — that operational question is out of scope here.
+
+## MC dropout (explored, not adopted)
+
+The third Phase 9 sub-step asked whether an alternative uncertainty signal — Monte Carlo dropout — would rank test examples by reliability at least as well as the calibrated-confidence approach above. The comparison was run rigorously, and the answer is no: MC dropout is documented here as a rejected alternative, not a deployed one.
+
+**Why E04 was excluded.** Neither the project's custom E04 head nor the underlying torchvision `densenet121` (default `drop_rate=0`, confirmed against the installed source) contains any dropout layers. MC dropout requires an architecture with dropout already present; E04 has none, and adding it would require retraining, which was out of scope for this sub-step. MC dropout was therefore only implemented for E08.
+
+**Method.** E08's `FusionModel` contains two dropout layers on its active forward path (`clinical_encoder.2` and `fusion_head.2`, both p=0.3) — both downstream of the frozen DenseNet vision embedding. For each of the 1314 test examples, the (dropout-free) vision embedding was computed once and reused, then the fusion head was run 50 times with only those two dropout layers left stochastic; the DenseNet backbone stayed in `eval()` mode throughout the whole procedure so BatchNorm continued using its frozen running statistics rather than batch statistics — mixing those two modes would have silently corrupted the vision embeddings themselves, not just added noise. Per label, the mean and standard deviation across the 50 samples were recorded; the standard deviation is the MC-dropout uncertainty score, with test examples ranked by ascending std (lowest std = most confident) for the same 1.0→0.5 coverage sweep used for calibrated-confidence abstention.
+
+**Sanity check passed.** Mean absolute difference between the MC-dropout mean and the original deterministic single-pass probability was small across all 5 labels (0.004–0.011), confirming the MC samples are centered correctly around the model's normal operating point rather than reflecting some other, broken computation.
+
+**Result: MC-dropout ranking underperformed calibrated-confidence ranking on 4 of 5 labels, sometimes substantially**, comparing balanced accuracy at coverage 0.7:
+
+| Label | Calibrated-confidence ranking | MC-dropout ranking |
+|---|---|---|
+| Cardiomegaly | 0.783 | 0.751 |
+| Edema | 0.703 | 0.681 |
+| Atelectasis | 0.639 | **0.588** |
+| Pleural Effusion | 0.781 | 0.722 |
+| Consolidation | 0.650 | **0.660** |
+
+Atelectasis is the sharpest case: MC-dropout-ranked abstention (0.588) performs *worse* than E08's own no-abstention baseline from the earlier analysis (0.606) — actively counterproductive, not merely less helpful. Consolidation is the sole exception, where MC-dropout ranking wins narrowly (0.660 vs 0.650); a plausible but unconfirmed explanation is that Consolidation/E08's unusually low decision threshold (0.20, versus 0.35–0.50 elsewhere) makes `|calibrated_prob − threshold|` a comparatively weaker confidence signal there, and a threshold-agnostic uncertainty measure like MC-dropout std doesn't inherit that particular distortion — this is a hypothesis worth stating, not a proven mechanism.
+
+**Why this happened, mechanistically.** The two active dropout layers sit entirely downstream of the vision embedding — the actual image-processing pathway (the frozen DenseNet backbone) is fully deterministic and untouched by dropout. MC-dropout variance here can therefore only capture "how sensitive is the small fusion head to stochastic perturbation of its own p=0.3 dropout masks," which is a narrower and noisier signal than the calibrated probability's distance from a label's decision threshold — the latter reflects the full pipeline's output, image and clinical information both. This was flagged as a likely outcome before the experiment ran (limited dropout scope, modest architectural stochasticity), and it is exactly what was observed.
+
+**Deployment decision:** MC-dropout uncertainty is not adopted. The existing calibrated-confidence approach (deployed temperatures + per-label Youden's J thresholds) remains the system's abstention mechanism, documented above. This result is retained as a negative finding: the evaluation harness built for calibrated-confidence abstention was reused, unmodified in its scoring logic, to test an alternative — and it correctly detected that the alternative underperforms rather than only ever reporting methods that work.
+
+Full artifacts: `outputs/calibration/mc_dropout_e08.parquet` (all 1314×50 samples, summarized to mean/std per label), `outputs/calibration/mc_dropout_coverage_results.csv`, `outputs/calibration/mc_dropout_vs_calibration_coverage.png` (5-panel comparison figure, calibrated-confidence vs. MC-dropout ranking, both sensitivity and specificity curves).
+
+### Limitations (MC dropout)
+
+- Only E08 was evaluated; no MC-dropout comparison exists for E04, since it has no dropout layers by construction.
+- The negative result is specific to this architecture's dropout placement (small, downstream-only, p=0.3 on two layers) and should not be generalized to "MC dropout doesn't work for medical imaging" — a model with dropout distributed through its vision backbone (as in some from-scratch architectures) could plausibly show a different result.
+- The Consolidation exception is reported with an explanation offered as a hypothesis, not verified further; testing it directly (e.g. checking whether the calibrated-confidence signal is specifically noisier near unusual thresholds) was out of scope for this sub-step.
