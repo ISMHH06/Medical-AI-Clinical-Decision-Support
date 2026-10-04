@@ -1,6 +1,6 @@
-# Phase 13 — Production System: API
+# Phase 13 — Production System: API & Frontend
 
-**Status: backend complete (prediction + explanation endpoints). Frontend not yet built.**
+**Status: complete.** Backend (prediction + explanation endpoints) and a React frontend calling both.
 
 ## What was built
 
@@ -32,9 +32,18 @@ An earlier attempt to verify `/explain` over HTTP from within the coding agent's
 - **No abstention logic yet.** Phase 9's calibrated-confidence abstention mechanism is not exposed via the API — responses currently always return a binary prediction, with no "uncertain, recommend human review" signal. This is the natural next increment.
 - A pandas `FutureWarning` appears during clinical feature BMI handling (`fillna` downcasting behavior that will change in a future pandas version). Not currently affecting correctness, but worth a proactive fix rather than waiting for a pandas upgrade to silently change behavior.
 
+## Frontend
+
+Built as a separate React + Vite application (`frontend/`), not served by FastAPI — a deliberate choice to use a real framework from the start rather than a plain-HTML placeholder, given the frontend's role as part of a portfolio project. Communicates with the FastAPI backend over `fetch()` across origins, requiring `CORSMiddleware` to be added to `app/main.py` (restricted to the Vite dev origin `http://localhost:5173`, not a wildcard).
+
+**Structure:** `App.jsx` holds all state (selected image, clinical form fields, prediction/explanation results, loading and error states for each call) via plain `useState` — appropriate at this scale, no state-management library needed. Three components: `UploadForm` (image + clinical fields, triggers `/predict`), `PredictionResults` (renders the E04/E08 probability table, triggers `/explain`), `ExplanationResults` (renders Grad-CAM images and signed SHAP bars per label). `/predict` and `/explain` are deliberately separate user actions (not triggered together), since `/explain` takes noticeably longer (~1.4–2.4s vs. `/predict`'s sub-second response) and most uses of the tool won't need an explanation for every prediction.
+
+**Verification performed**, not just "the dev servers started": a 13-check verification script confirmed, with real HTTP requests and real test-split data (not mocked): the Vite dev server serves and correctly transforms all 5 source files; CORS preflight (`OPTIONS`) succeeds for both `/predict` and `/explain` with the correct `Access-Control-Allow-Origin` header; a request from an unauthorized origin (`evil.example.com`) does **not** receive that header (negative control, confirming CORS is actually restrictive, not just present); and live `POST /predict` and `POST /explain` calls through the CORS-enabled path return results numerically consistent with every earlier verification in this phase. The dropdown option lists for sex/race/ethnicity/insurance_type were pulled from the actual train-split category sets (the same ones Phase 10's subgroup fairness analysis used), not a guessed or simplified list — so the frontend cannot submit a value the backend would reject.
+
+The disclaimer "Research prototype — not a medical device" is shown in the app header — a responsible addition given the subject matter, included without being explicitly requested.
+
 ## Next steps
 
-1. Build the simple frontend (image upload + clinical form + results display).
-2. Close the plausibility/missingness flag gap noted above.
-3. Add an abstention/confidence-flag field to `/predict` and `/explain` responses, reusing Phase 9's logic.
-4. Phase 14 (serving/optimization): latency benchmarking, containerization, and revisiting the base64-image response design if needed.
+1. Close the plausibility/missingness flag gap noted above (hardcoded `age_implausible`/`recent_bmi_implausible`/`*_missing` flags).
+2. Add an abstention/confidence-flag field to `/predict` and `/explain` responses, reusing Phase 9's logic, and surface it in the frontend.
+3. Phase 14 (serving/optimization): latency benchmarking, containerization, and revisiting the base64-image response design if needed.

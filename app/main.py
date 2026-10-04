@@ -5,6 +5,7 @@ from __future__ import annotations
 from contextlib import asynccontextmanager
 
 from fastapi import Depends, FastAPI, File, Form, HTTPException, Request, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.inference import PredictionService
 from app.schemas import ClinicalInput, ExplanationResponse, HealthResponse, PredictionResponse
@@ -17,6 +18,14 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title="Medical AI Clinical Decision Support", version="0.1.0", lifespan=lifespan)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_methods=["GET", "POST"],
+    allow_headers=["*"],
+    allow_credentials=False,
+)
 
 
 async def get_prediction_service(request: Request) -> PredictionService:
