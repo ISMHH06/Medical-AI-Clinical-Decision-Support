@@ -156,7 +156,7 @@ def main() -> None:
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
-    frame = pd.read_parquet(MANIFEST_PATH)
+    frame = pd.read_parquet(MANIFEST_PATH, engine='fastparquet')
     test_frame = frame.loc[frame["split"] == "test"].reset_index(drop=True)
     n_rows = len(test_frame)
     print(f"Test split size: {n_rows}")

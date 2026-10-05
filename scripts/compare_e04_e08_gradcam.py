@@ -27,7 +27,7 @@ OUTPUT_PATH = REPO_ROOT / "outputs" / "e04_vs_e08_comparison" / "patient_1035_ca
 
 def main() -> None:
     """Compare the E04 and E08 Grad-CAM overlays for patient 1035 (Cardiomegaly)."""
-    frame = pd.read_parquet(MANIFEST_PATH)
+    frame = pd.read_parquet(MANIFEST_PATH, engine='fastparquet')
     val_frame = frame.loc[frame["split"] == "val"].reset_index(drop=True)
     dataset = FusionDataset(str(MANIFEST_PATH), "val", str(VISION_EMBEDDINGS_PATH))
 

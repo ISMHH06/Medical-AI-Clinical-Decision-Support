@@ -1,5 +1,10 @@
 pandas
 pyarrow
+# fastparquet + cramjam: parquet engine used explicitly (engine='fastparquet')
+# everywhere because Windows Smart App Control blocks pyarrow's native DLL on
+# this machine; pyarrow stays listed for machines where it imports fine.
+fastparquet
+cramjam
 PyYAML
 redivis
 matplotlib

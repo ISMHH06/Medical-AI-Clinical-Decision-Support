@@ -131,7 +131,7 @@ def main() -> None:
             f"Predictions not found: {PREDICTIONS_PATH}. Run generate_val_predictions.py first."
         )
 
-    df = pd.read_parquet(PREDICTIONS_PATH)
+    df = pd.read_parquet(PREDICTIONS_PATH, engine='fastparquet')
     n_val = len(df)
     print(f"Loaded {n_val} val predictions.")
     print(f"Using {N_BINS} equal-width bins (~{n_val / N_BINS:.0f} samples/bin if evenly spread).\n")

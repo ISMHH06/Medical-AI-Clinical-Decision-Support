@@ -55,7 +55,7 @@ def main() -> None:
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    frame = pd.read_parquet(MANIFEST_PATH)
+    frame = pd.read_parquet(MANIFEST_PATH, engine='fastparquet')
     val_frame = frame.loc[frame["split"] == "val"].reset_index(drop=True)
     positive_indices = val_frame.index[val_frame[LABEL_NAME] == 1].tolist()
     negative_indices = val_frame.index[val_frame[LABEL_NAME] == 0].tolist()

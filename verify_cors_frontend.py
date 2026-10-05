@@ -21,7 +21,7 @@ def check(name: str, condition: bool, detail: str) -> None:
 
 def main() -> None:
     # ---- test row 0 (same source as earlier verification scripts) ----
-    manifest = pd.read_parquet(REPO / "data" / "processed" / "image_subset_manifest.parquet")
+    manifest = pd.read_parquet(REPO / "data" / "processed" / "image_subset_manifest.parquet", engine='fastparquet')
     row = manifest.loc[manifest["split"] == "test"].reset_index(drop=True).iloc[0]
     image_path = Path(row["local_image_path"])
     image_bytes = image_path.read_bytes()

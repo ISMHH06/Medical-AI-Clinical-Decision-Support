@@ -62,7 +62,7 @@ class FusionDataset(Dataset):
         all_embeddings = np.load(embeddings_path)
 
         # Build clinical features using the same pattern as ClinicalDataset
-        frame = pd.read_parquet(manifest_path)
+        frame = pd.read_parquet(manifest_path, engine='fastparquet')
         subset = frame.loc[frame["split"] == split].reset_index(drop=True)
         if subset.empty:
             raise ValueError(f"The manifest has no rows in the {split!r} split.")

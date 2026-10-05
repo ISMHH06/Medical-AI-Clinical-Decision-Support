@@ -121,9 +121,9 @@ def main() -> None:
     if not TEST_PREDICTIONS_PATH.is_file():
         raise FileNotFoundError(f"Test predictions not found: {TEST_PREDICTIONS_PATH}")
 
-    manifest = pd.read_parquet(MANIFEST_PATH)
+    manifest = pd.read_parquet(MANIFEST_PATH, engine='fastparquet')
     test_frame = manifest.loc[manifest["split"] == "test"].reset_index(drop=True)
-    pred_df = pd.read_parquet(TEST_PREDICTIONS_PATH).reset_index(drop=True)
+    pred_df = pd.read_parquet(TEST_PREDICTIONS_PATH, engine='fastparquet').reset_index(drop=True)
 
     if len(test_frame) != len(pred_df):
         print(

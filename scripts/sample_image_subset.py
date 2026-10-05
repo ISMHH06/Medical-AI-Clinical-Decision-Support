@@ -120,7 +120,7 @@ def write_paths(paths: pd.Series, output_path: Path) -> None:
 def build_subset(input_path: Path, manifest_path: Path, paths_path: Path) -> pd.DataFrame:
     """Read the processed dataset, sample all splits, and save both manifests."""
     print(f"Loading processed dataset: {input_path}")
-    frame = pd.read_parquet(input_path)
+    frame = pd.read_parquet(input_path, engine='fastparquet')
     validate_dataset(frame)
     print(f"Loaded {len(frame)} rows.")
 
@@ -135,7 +135,7 @@ def build_subset(input_path: Path, manifest_path: Path, paths_path: Path) -> pd.
     final_subset = pd.concat(subsets, axis=0, ignore_index=True)
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
     paths_path.parent.mkdir(parents=True, exist_ok=True)
-    final_subset.to_parquet(manifest_path, index=False)
+    final_subset.to_parquet(manifest_path, index=False, engine='fastparquet')
     write_paths(final_subset["path_to_image"], paths_path)
 
     print("\nFINAL SUMMARY")

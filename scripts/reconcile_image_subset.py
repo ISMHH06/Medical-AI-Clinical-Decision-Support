@@ -31,7 +31,7 @@ def reconcile_manifest(manifest_path: Path, images_dir: Path, dropped_paths_path
     if not images_dir.is_dir():
         raise NotADirectoryError(f"Downloaded image directory was not found: {images_dir}")
 
-    manifest = pd.read_parquet(manifest_path)
+    manifest = pd.read_parquet(manifest_path, engine='fastparquet')
     if "path_to_image" not in manifest.columns:
         raise ValueError("Manifest is missing the required path_to_image column.")
 
@@ -53,7 +53,7 @@ def reconcile_manifest(manifest_path: Path, images_dir: Path, dropped_paths_path
             print(f"  {image_path}")
 
     # The user-requested overwrite contains every original column plus local_image_path.
-    kept.to_parquet(manifest_path, index=False)
+    kept.to_parquet(manifest_path, index=False, engine='fastparquet')
     write_dropped_paths(dropped, dropped_paths_path)
 
     print("\nFINAL SUMMARY")

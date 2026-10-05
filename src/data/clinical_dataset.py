@@ -33,7 +33,7 @@ class ClinicalDataset(Dataset):
         if split not in ("train", "val", "test"):
             raise ValueError(f"split must be 'train', 'val', or 'test', got {split!r}.")
 
-        frame = pd.read_parquet(manifest_path)
+        frame = pd.read_parquet(manifest_path, engine='fastparquet')
         required = {"split", *LABEL_COLUMNS}
         missing = sorted(required.difference(frame.columns))
         if missing:

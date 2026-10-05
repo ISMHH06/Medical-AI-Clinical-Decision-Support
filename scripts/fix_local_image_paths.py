@@ -28,7 +28,7 @@ def rebuild_local_image_paths(manifest_path: Path) -> pd.DataFrame:
     repository_root = Path(__file__).resolve().parents[1]
     images_dir = repository_root / "CheXpertPlus_selected"
 
-    frame = pd.read_parquet(manifest_path)
+    frame = pd.read_parquet(manifest_path, engine='fastparquet')
     if "local_image_path" not in frame.columns:
         raise ValueError("Manifest is missing the required local_image_path column.")
 
@@ -67,7 +67,7 @@ def rebuild_local_image_paths(manifest_path: Path) -> pd.DataFrame:
 
     updated = frame.copy()
     updated["local_image_path"] = rebuilt_paths.astype(str)
-    updated.to_parquet(manifest_path, index=False)
+    updated.to_parquet(manifest_path, index=False, engine='fastparquet')
 
     print("\nFINAL SUMMARY")
     print(f"Total rows updated: {total_rows}")

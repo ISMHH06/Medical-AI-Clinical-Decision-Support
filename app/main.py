@@ -7,6 +7,8 @@ from contextlib import asynccontextmanager
 from fastapi import Depends, FastAPI, File, Form, HTTPException, Request, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 
+import torch
+
 from app.inference import PredictionService
 from app.schemas import ClinicalInput, ExplanationResponse, HealthResponse, PredictionResponse
 
@@ -71,6 +73,25 @@ async def parse_clinical_input(
 @app.get("/health", response_model=HealthResponse)
 async def health() -> HealthResponse:
     return HealthResponse(status="ok")
+
+
+@app.get("/debug/memory")
+async def debug_memory() -> dict[str, bool | float | None]:
+    cuda_available = torch.cuda.is_available()
+    if not cuda_available:
+        return {
+            "cuda_available": False,
+            "allocated_mb": None,
+            "max_allocated_mb": None,
+            "reserved_mb": None,
+        }
+    megabyte = 1024 * 1024
+    return {
+        "cuda_available": True,
+        "allocated_mb": torch.cuda.memory_allocated() / megabyte,
+        "max_allocated_mb": torch.cuda.max_memory_allocated() / megabyte,
+        "reserved_mb": torch.cuda.memory_reserved() / megabyte,
+    }
 
 
 @app.post("/predict", response_model=PredictionResponse)

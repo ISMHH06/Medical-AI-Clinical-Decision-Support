@@ -30,7 +30,7 @@ CASE_INDICES = [136, 1035, 403, 451]
 
 def main() -> None:
     """Create one dense explanation figure per selected patient."""
-    frame = pd.read_parquet(MANIFEST_PATH)
+    frame = pd.read_parquet(MANIFEST_PATH, engine='fastparquet')
     val_frame = frame.loc[frame["split"] == "val"].reset_index(drop=True)
     train_frame = frame.loc[frame["split"] == "train"].reset_index(drop=True)
     feature_names = get_train_feature_columns(train_frame)

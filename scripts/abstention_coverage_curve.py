@@ -138,7 +138,7 @@ def main() -> None:
     for path in (TEMPERATURES_PATH, PREDICTIONS_PATH, THRESHOLDS_PATH):
         if not path.is_file():
             raise FileNotFoundError(f"Required input was not found: {path}")
-    predictions = pd.read_parquet(PREDICTIONS_PATH)
+    predictions = pd.read_parquet(PREDICTIONS_PATH, engine='fastparquet')
     print(f"Loaded {len(predictions):,} test predictions from {PREDICTIONS_PATH}")
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     results = build_results(predictions)

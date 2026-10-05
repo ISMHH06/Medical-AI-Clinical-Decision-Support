@@ -54,7 +54,7 @@ class FusionDatasetE09(Dataset):
         self.image_dataset = ChestXrayDataset(manifest_path, split=split)
 
         # Build clinical features using leakage-prevention pattern
-        frame = pd.read_parquet(manifest_path)
+        frame = pd.read_parquet(manifest_path, engine='fastparquet')
         subset = frame.loc[frame["split"] == split].reset_index(drop=True)
         if subset.empty:
             raise ValueError(f"The manifest has no rows in the {split!r} split.")

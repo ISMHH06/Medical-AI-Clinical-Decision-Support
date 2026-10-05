@@ -95,7 +95,7 @@ def main() -> None:
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
 
-    frame = pd.read_parquet(MANIFEST_PATH)
+    frame = pd.read_parquet(MANIFEST_PATH, engine='fastparquet')
     split_frame = frame.loc[frame["split"] == split].reset_index(drop=True)
     n_rows = len(split_frame)
     print(f"{split.capitalize()} split size: {n_rows}")
@@ -159,7 +159,7 @@ def main() -> None:
         out[f"{label}_e08"] = e08_probs[:, i]
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    out.to_parquet(output_path, index=False)
+    out.to_parquet(output_path, index=False, engine='fastparquet')
 
     elapsed_total = time.time() - start
     print(f"\nSaved {n_rows} rows x {n_labels} labels x 2 models to: {output_path}")

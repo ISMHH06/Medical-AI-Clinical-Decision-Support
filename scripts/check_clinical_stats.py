@@ -4,7 +4,7 @@ sys.path.insert(0, '.')
 from src.data.clinical_features import build_clinical_features
 import pandas as pd
 
-train_df = pd.read_parquet('data/processed/image_subset_manifest.parquet')
+train_df = pd.read_parquet('data/processed/image_subset_manifest.parquet', engine='fastparquet')
 train_df = train_df[train_df['split'] == 'train']
 features_df, cols = build_clinical_features(train_df, train_frame=train_df)
 

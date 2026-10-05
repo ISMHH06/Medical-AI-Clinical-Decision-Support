@@ -1,0 +1,37 @@
+{
+  "first_request": {
+    "latency_seconds": 0.412011800000073,
+    "note": "may include residual warmup from server start, not a true isolated cold start"
+  },
+  "predict_stats_ms": {
+    "n": 50,
+    "mean_ms": 173.69481000000405,
+    "median_ms": 166.9723500000373,
+    "p95_ms": 226.06740000003356,
+    "p99_ms": 241.50640000004842,
+    "min_ms": 146.65510000008908,
+    "max_ms": 241.50640000004842
+  },
+  "explain_stats_ms": {
+    "n": 20,
+    "mean_ms": 1288.6409400000161,
+    "median_ms": 1267.0190999999704,
+    "p95_ms": 1427.756899999963,
+    "p99_ms": 1428.8798000000043,
+    "min_ms": 1181.266800000003,
+    "max_ms": 1428.8798000000043
+  },
+  "memory_baseline": {
+    "cuda_available": true,
+    "allocated_mb": 54.45263671875,
+    "max_allocated_mb": 54.45263671875,
+    "reserved_mb": 72.0
+  },
+  "memory_final": {
+    "cuda_available": true,
+    "allocated_mb": 70.87353515625,
+    "max_allocated_mb": 205.67041015625,
+    "reserved_mb": 232.0
+  },
+  "memory_note": "max_allocated_mb is cumulative since server process start, not reset per-benchmark run"
+}

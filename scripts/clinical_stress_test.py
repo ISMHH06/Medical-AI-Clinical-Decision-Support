@@ -193,7 +193,7 @@ def main() -> None:
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
 
-    frame = pd.read_parquet(MANIFEST_PATH)
+    frame = pd.read_parquet(MANIFEST_PATH, engine='fastparquet')
     train_frame = frame.loc[frame["split"] == "train"].reset_index(drop=True)
     test_frame = frame.loc[frame["split"] == "test"].reset_index(drop=True)
     if test_frame.empty:

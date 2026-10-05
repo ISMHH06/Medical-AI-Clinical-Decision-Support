@@ -278,7 +278,7 @@ def build_dataset(config_path: str | Path) -> pd.DataFrame:
 
     LOGGER.info("7. SAVE OUTPUT")
     parquet_path.parent.mkdir(parents=True, exist_ok=True)
-    frame.to_parquet(parquet_path, index=False)
+    frame.to_parquet(parquet_path, index=False, engine='fastparquet')
     write_data_dictionary(frame, dictionary_path)
     LOGGER.info("  Saved processed table: %s", parquet_path)
     LOGGER.info("  Saved data dictionary: %s", dictionary_path)

@@ -100,7 +100,7 @@ class ChestXrayDataset(Dataset):
         if not manifest_file.is_file():
             raise FileNotFoundError(f"Manifest was not found: {manifest_file}")
 
-        frame = pd.read_parquet(manifest_file)
+        frame = pd.read_parquet(manifest_file, engine='fastparquet')
         missing = sorted(REQUIRED_COLUMNS.difference(frame.columns))
         if missing:
             raise ValueError(f"Manifest is missing required columns: {missing}")

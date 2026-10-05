@@ -112,8 +112,8 @@ def main() -> None:
     if not TEST_PREDICTIONS_PATH.is_file():
         raise FileNotFoundError(f"Missing test predictions: {TEST_PREDICTIONS_PATH}")
 
-    val_df = pd.read_parquet(VAL_PREDICTIONS_PATH)
-    test_df = pd.read_parquet(TEST_PREDICTIONS_PATH)
+    val_df = pd.read_parquet(VAL_PREDICTIONS_PATH, engine='fastparquet')
+    test_df = pd.read_parquet(TEST_PREDICTIONS_PATH, engine='fastparquet')
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 

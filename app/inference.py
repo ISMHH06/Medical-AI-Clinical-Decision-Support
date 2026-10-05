@@ -143,7 +143,7 @@ class PredictionService:
             raise FileNotFoundError(f"Missing manifest: {MANIFEST_PATH}")
 
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        manifest = pd.read_parquet(MANIFEST_PATH)
+        manifest = pd.read_parquet(MANIFEST_PATH, engine='fastparquet')
         train_frame = manifest.loc[manifest["split"] == "train"].reset_index(drop=True)
         if train_frame.empty:
             raise ValueError("Training split is empty in the manifest.")

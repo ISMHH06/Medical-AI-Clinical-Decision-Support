@@ -41,7 +41,7 @@ def load_row_case(dataset: FusionDataset, val_frame: pd.DataFrame, idx: int) -> 
 
 def build_background_features() -> np.ndarray:
     """Build a deterministic 50-row train-split clinical feature background."""
-    frame = pd.read_parquet(MANIFEST_PATH)
+    frame = pd.read_parquet(MANIFEST_PATH, engine='fastparquet')
     train_frame = frame.loc[frame["split"] == "train"].reset_index(drop=True)
     rng = np.random.default_rng(42)
     candidate_indices = rng.choice(len(train_frame), size=min(50, len(train_frame)), replace=False)
@@ -96,7 +96,7 @@ def print_top_features(label_name: str, values: np.ndarray, feature_names: list[
 
 def main() -> None:
     """Compute SHAP feature attributions for the specified val rows."""
-    frame = pd.read_parquet(MANIFEST_PATH)
+    frame = pd.read_parquet(MANIFEST_PATH, engine='fastparquet')
     val_frame = frame.loc[frame["split"] == "val"].reset_index(drop=True)
     train_frame = frame.loc[frame["split"] == "train"].reset_index(drop=True)
     feature_columns = get_train_feature_columns(train_frame)

@@ -196,7 +196,7 @@ def main() -> None:
         if not path.is_file():
             raise FileNotFoundError(f"Required input was not found: {path}")
 
-    predictions = pd.read_parquet(PREDICTIONS_PATH)
+    predictions = pd.read_parquet(PREDICTIONS_PATH, engine='fastparquet')
     temperatures = load_deployed_temperatures()
     thresholds = load_thresholds()
 

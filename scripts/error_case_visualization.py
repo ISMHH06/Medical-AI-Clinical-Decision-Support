@@ -172,7 +172,7 @@ def select_cases(predictions: pd.DataFrame, calibrated_probs: dict[str, np.ndarr
 
 
 def load_case_image_data(row_index: int) -> tuple[str, torch.Tensor]:
-    manifest = pd.read_parquet(MANIFEST_PATH)
+    manifest = pd.read_parquet(MANIFEST_PATH, engine='fastparquet')
     test_frame = manifest.loc[manifest["split"] == "test"].reset_index(drop=True)
     if row_index >= len(test_frame):
         raise IndexError(f"row_index={row_index} is outside the test split size {len(test_frame)}")
@@ -194,7 +194,7 @@ def main() -> None:
         if not path.is_file():
             raise FileNotFoundError(f"Required input was not found: {path}")
 
-    predictions = pd.read_parquet(PREDICTIONS_PATH).reset_index(drop=True)
+    predictions = pd.read_parquet(PREDICTIONS_PATH, engine='fastparquet').reset_index(drop=True)
     temperatures = load_deployed_temperatures()
     thresholds = load_thresholds()
     calibrated_probs = build_calibrated_probabilities(predictions, temperatures)

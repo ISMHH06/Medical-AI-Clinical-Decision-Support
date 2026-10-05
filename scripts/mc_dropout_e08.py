@@ -201,13 +201,13 @@ def save_mc_samples(frame: pd.DataFrame, means: np.ndarray, stds: np.ndarray) ->
         output[f"{label}_true"] = frame[label].to_numpy(dtype=int)
         output[f"{label}_mc_mean"] = means[:, index]
         output[f"{label}_mc_std"] = stds[:, index]
-    output.to_parquet(MC_SAMPLES_PATH, index=False)
+    output.to_parquet(MC_SAMPLES_PATH, index=False, engine='fastparquet')
     return output
 
 
 def print_sanity_check(mc_samples: pd.DataFrame, temperatures: dict[str, float]) -> None:
     """Compare deployed MC means against deployed deterministic E08 probabilities."""
-    predictions = pd.read_parquet(PREDICTIONS_PATH)
+    predictions = pd.read_parquet(PREDICTIONS_PATH, engine='fastparquet')
     if len(predictions) != len(mc_samples) or not np.array_equal(
         predictions["row_index"].to_numpy(), mc_samples["row_index"].to_numpy()
     ):
@@ -337,7 +337,7 @@ def main() -> None:
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Using device: {device}")
 
-    manifest = pd.read_parquet(MANIFEST_PATH)
+    manifest = pd.read_parquet(MANIFEST_PATH, engine='fastparquet')
     test_frame = manifest.loc[manifest["split"] == "test"].reset_index(drop=True)
     if test_frame.empty:
         raise ValueError("The manifest has no test rows.")

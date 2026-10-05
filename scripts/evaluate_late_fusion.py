@@ -100,7 +100,7 @@ def compute_sensitivity_specificity(
 
 def load_manifest_val_split(manifest_path: Path) -> pd.DataFrame:
     """Load and return the val-split rows from the manifest, in original order."""
-    df = pd.read_parquet(manifest_path)
+    df = pd.read_parquet(manifest_path, engine='fastparquet')
     val_df = df.loc[df["split"] == "val"].reset_index(drop=True)
     if val_df.empty:
         raise ValueError("Manifest has no rows in val split.")

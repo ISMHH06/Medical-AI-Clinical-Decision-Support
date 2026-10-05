@@ -6,7 +6,7 @@ from src.data.clinical_features import build_clinical_features, get_train_standa
 import pandas as pd
 
 print('=== TRAIN ===')
-train_df = pd.read_parquet('data/processed/image_subset_manifest.parquet')
+train_df = pd.read_parquet('data/processed/image_subset_manifest.parquet', engine='fastparquet')
 train_df = train_df[train_df['split'] == 'train']
 
 train_age_mean, train_age_std, train_bmi_mean, train_bmi_std = get_train_standardization_stats(train_df)
@@ -19,9 +19,9 @@ print('Train bmi (standardized): mean={:.6f}, std={:.6f}'.format(features_df['re
 print()
 
 print('=== VAL ===')
-val_df = pd.read_parquet('data/processed/image_subset_manifest.parquet')
+val_df = pd.read_parquet('data/processed/image_subset_manifest.parquet', engine='fastparquet')
 val_df = val_df[val_df['split'] == 'val']
-train_df = pd.read_parquet('data/processed/image_subset_manifest.parquet')
+train_df = pd.read_parquet('data/processed/image_subset_manifest.parquet', engine='fastparquet')
 train_df = train_df[train_df['split'] == 'train']
 
 features_df, _ = build_clinical_features(
